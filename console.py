@@ -42,7 +42,6 @@ class HBNBCommand(cmd.Cmd):
         (Brackets denote optional fields in usage example.)
         """
         _cmd = _cls = _id = _args = ''  # initialize line elements
-
         # scan for general formating - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
@@ -52,7 +51,7 @@ class HBNBCommand(cmd.Cmd):
 
             # isolate <class name>
             _cls = pline[:pline.find('.')]
-
+          
             # isolate and validate <command>
             _cmd = pline[pline.find('.') + 1:pline.find('(')]
             if _cmd not in HBNBCommand.dot_cmds:
@@ -63,7 +62,6 @@ class HBNBCommand(cmd.Cmd):
             if pline:
                 # partition args: (<id>, [<delim>], [<*args>])
                 pline = pline.partition(', ')  # pline convert to tuple
-
                 # isolate _id, stripping quotes
                 _id = pline[0].replace('\"', '')
                 # possible bug here:
@@ -78,9 +76,9 @@ class HBNBCommand(cmd.Cmd):
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
-                        # _args = _args.replace('\"', '')
+                        _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
-
+            print(line)
         except Exception as mess:
             pass
         finally:
@@ -115,13 +113,31 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        
+        subStr = args.split()
+        print(subStr)
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif subStr[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        new_instance = HBNBCommand.classes[subStr[0]]()
+        if len(subStr) > 1:
+            for param in subStr[1:]:
+                paramDic = param.split('=')
+                paramDic[1] = paramDic[1].replace('_', ' ').replace('"', '')
+                try:
+                    if '.' in paramDic[1]:
+                        paramDic[1] = float(paramDic[1])
+                    else:
+                        paramDic[1] = int(paramDic[1])
+                except ValueError:
+                    pass  # Not convertible to int or float
+                setattr(new_instance, paramDic[0], paramDic[1])
+                print(paramDic)
+                print(isinstance(paramDic[1], int), f"-----> {paramDic[1]}")
+
         storage.save()
         print(new_instance.id)
         storage.save()
