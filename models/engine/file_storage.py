@@ -20,7 +20,7 @@ class FileStorage:
         # print(FileStorage.__objects.keys(), "22222222")
         # print(FileStorage.__objects.items(), "333333333")
         # print("#########################################")
-        for key , val in self.__objects.items():
+        for key , val in FileStorage.__objects.items():
             if isinstance(val, cls):
                 cls_obj[key] =  val
         return cls_obj
