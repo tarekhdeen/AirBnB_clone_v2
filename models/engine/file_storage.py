@@ -43,7 +43,10 @@ class FileStorage:
             if val is obj:
                 obj_to_del = key
         if obj_to_del is not None:
-            del self.__objects[obj_to_del]
+            # print("***** object to del *****", obj_to_del)
+            # print("Before delete",FileStorage.__objects)
+            del FileStorage.__objects[obj_to_del]
+            # print("after delete", FileStorage.__objects)
         
                 
     
