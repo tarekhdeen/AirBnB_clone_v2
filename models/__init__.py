@@ -13,5 +13,6 @@ if storage_t == "db":
     storage = DBStorage()
 else:
     from models.engine.file_storage import FileStorage
+    print("error here")
     storage = FileStorage()
 storage.reload()
